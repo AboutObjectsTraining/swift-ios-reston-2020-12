@@ -3,7 +3,32 @@
 
 import UIKit
 
+extension CoolController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("In \(#function)")
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
 class CoolController: UIViewController {
+    
+    private var textField: UITextField?
+    private var contentView: UIView?
+    
+    @objc private func addCell() {
+        print("In \(#function), text is \(textField?.text ?? "")")
+        let newCell = CoolViewCell()
+        newCell.text = textField?.text
+        contentView?.addSubview(newCell)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("In \(#function) in \(type(of: self))")
+        
+        super.touchesBegan(touches, with: event)
+    }
 
     override func loadView() {
         view = UIView()
@@ -15,6 +40,8 @@ class CoolController: UIViewController {
         let accessoryView = UIView(frame: accessoryRect)
         let contentView = UIView(frame: contentRect)
         
+        self.contentView = contentView
+        
         contentView.clipsToBounds = true
         
         view.addSubview(accessoryView)
@@ -23,6 +50,23 @@ class CoolController: UIViewController {
         accessoryView.backgroundColor = UIColor(white: 1, alpha: 0.6)
         contentView.backgroundColor = UIColor(white: 1, alpha: 0.4)
         
+        // Controls
+        
+        textField = UITextField(frame: CGRect(x: 15, y: 50, width: 240, height: 30))
+        accessoryView.addSubview(textField!)
+        textField?.placeholder = "Enter a label"
+        textField?.borderStyle = .roundedRect
+        textField?.clearButtonMode = .whileEditing
+        
+        textField?.delegate = self
+        
+        let button = UIButton(type: .system)
+        accessoryView.addSubview(button)
+        button.setTitle("Add Cell", for: .normal)
+        button.sizeToFit()
+        button.frame = button.frame.offsetBy(dx: 265, dy: 50)
+        
+        button.addTarget(self, action: #selector(addCell), for: .touchUpInside)
         
         // Cool Cells
         let cell1 = CoolViewCell(frame: CGRect(x: 20, y: 60, width: 200, height: 40))

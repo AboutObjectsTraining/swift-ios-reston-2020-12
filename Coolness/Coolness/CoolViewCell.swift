@@ -42,6 +42,7 @@ extension CoolViewCell
         layer.borderColor = UIColor.white.cgColor
         layer.cornerRadius = 10
         layer.masksToBounds = true
+        backgroundColor = UIColor.systemBlue
     }
 }
 
