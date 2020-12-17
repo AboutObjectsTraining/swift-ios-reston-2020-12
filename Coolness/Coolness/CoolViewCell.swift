@@ -12,12 +12,65 @@ class CoolViewCell: UIView {
         didSet { alpha = highlighted ? 0.5 : 1.0 }
     }
     
-    // MARK: - Drawing and resizing
-    
     var text: String? {
         didSet { sizeToFit() }
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureLayer()
+        configureGestureRecognizers()
+    }
+    
+    // FIXME: Implement me!
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - Configuring cells
+extension CoolViewCell
+{
+    private func configureGestureRecognizers() {
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(bounce))
+        recognizer.numberOfTapsRequired = 2
+        addGestureRecognizer(recognizer)
+    }
+    
+    private func configureLayer() {
+        layer.borderWidth = 3
+        layer.borderColor = UIColor.white.cgColor
+        layer.cornerRadius = 10
+        layer.masksToBounds = true
+    }
+}
+
+// MARK: - Animation
+
+extension CoolViewCell
+{
+    @objc private func bounce() {
+        print("In \(#function)")
+        animateBounce(duration: 1, size: CGSize(width: 120, height: 240))
+    }
+    
+    private func animateBounce(duration: TimeInterval, size: CGSize) {
+        UIView.animate(withDuration: duration,
+                       animations: { self.configureBounce(size: size) },
+                       completion: { _ in self.transform = .identity  })
+    }
+    
+    private func configureBounce(size: CGSize) {
+        UIView.modifyAnimations(withRepeatCount: 5, autoreverses: true) {
+            let translation = CGAffineTransform(translationX: size.width, y: size.height)
+            self.transform = translation.rotated(by: .pi / 2)
+        }
+    }
+}
+    
+// MARK: - Drawing and resizing
+extension CoolViewCell
+{
     class var textAttributes: [NSAttributedString.Key: Any] {
         return [.font: UIFont.boldSystemFont(ofSize: 20),
                 .foregroundColor: UIColor.white]
@@ -35,8 +88,11 @@ class CoolViewCell: UIView {
         guard let text = text else { return }
         (text as NSString).draw(at: textOrigin, withAttributes: type(of: self).textAttributes)
     }
+}
     
-    // MARK: - UIResponder methods
+// MARK: - UIResponder methods
+extension CoolViewCell
+{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         superview?.bringSubviewToFront(self)
         highlighted = true
