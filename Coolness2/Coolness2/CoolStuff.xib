@@ -55,6 +55,9 @@
                             <color key="backgroundColor" systemColor="systemPurpleColor"/>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="string" keyPath="text" value="Hello World! 🌍🌎🌏"/>
+                                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                    <real key="value" value="3"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </view>
                         <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9oY-rO-Rma" customClass="CoolViewCell" customModule="Coolness2" customModuleProvider="target">

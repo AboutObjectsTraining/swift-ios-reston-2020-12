@@ -17,6 +17,11 @@ class CoolViewCell: UIView {
         didSet { sizeToFit() }
     }
     
+    @IBInspectable var borderWidth: CGFloat {
+        get { layer.borderWidth }
+        set { layer.borderWidth = newValue }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureLayer()
